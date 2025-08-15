@@ -32,16 +32,14 @@ public class PantallaMenu extends JFrame {
         panelBotones.add(btnFijo);
         
         btnFijo.addActionListener(e->{
-            new AhorcadoAzarPantalla().setVisible(true);
+             new AhorcadoFijoPantalla().setVisible(true);
         });
 
         JButton btnAzar = new JButton("Ahorcado Azar");
         btnAzar.setFont(new Font("Arial", Font.PLAIN, 20));
         panelBotones.add(btnAzar);
         btnAzar.addActionListener(e->{
-            this.dispose();
-            AhorcadoAzarPantalla pan = new AhorcadoAzarPantalla();
-            pan.setVisible(true);
+            new AhorcadoAzarPantalla().setVisible(true);
         });
 
         JButton btnSalir = new JButton("Salir");

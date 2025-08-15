@@ -18,18 +18,10 @@ public abstract class JuegoAhorcadoBase implements JuegoAhorcado {
     protected ArrayList<Character> letrasUsadas;
     protected ArrayList<String> figuraAhorcado;
     
-    abstract void actualizarPalabraActual(char letra);
-    abstract boolean verificarLetra(char letra);
-    abstract boolean hasGanado();
+    public abstract void actualizarPalabraActual(char letra);
+    public abstract boolean verificarLetra(char letra);
+    public abstract boolean hasGanado();
     
-     protected void actualizarFigura() {
-        switch(intentos) {
-            case 1: figuraAhorcado.add("|o i o|"); break;
-            case 2: figuraAhorcado.add("|||||||\n||||||\n|||||"); break;
-            case 3: figuraAhorcado.add("||\n||\n||"); break;
-            case 4: figuraAhorcado.add("||\n||\n||"); break;
-            case 5: figuraAhorcado.add("||\n||\n||"); break;
-            case 6: figuraAhorcado.add("||\n||\n||"); break;
-        }
-    }
+     
+    
 }

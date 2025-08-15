@@ -31,7 +31,7 @@ public class JuegoAhorcadoAzar extends JuegoAhorcadoBase{
     }
 
     @Override
-    void actualizarPalabraActual(char letra) {
+    public void actualizarPalabraActual(char letra) {
        char[] letraActual = palabraActual.toCharArray();
        for(int i = 0; i< palabraSecreta.length(); i++){
            if(palabraSecreta.charAt(i)==letra){
@@ -42,7 +42,7 @@ public class JuegoAhorcadoAzar extends JuegoAhorcadoBase{
     }
 
     @Override
-    boolean verificarLetra(char letra) {
+    public boolean verificarLetra(char letra) {
       letra = Character.toUpperCase(letra);
       if(letrasUsadas.contains(letra)){
           JOptionPane.showMessageDialog(null, "Esta letra ya ha sido colocada.");
@@ -57,14 +57,14 @@ public class JuegoAhorcadoAzar extends JuegoAhorcadoBase{
       }else{
           JOptionPane.showMessageDialog(null, "Esta letra no existe en la palabra secreta.");
           intentos++;
-          actualizarFigura();
+       
           return false;
       }
       
     }
 
     @Override
-    boolean hasGanado() {
+    public boolean hasGanado() {
      return palabraActual.equals(palabraSecreta);
     }
 
