@@ -95,7 +95,7 @@ public class AhorcadoFijoPantalla extends JFrame {
         };
         panelFigura.setBounds(300, 250, 250, 250);
         panelFigura.setBackground(Color.WHITE);
-        panelFigura.setBorder(BorderFactory.createTitledBorder("El Ahorcado"));
+        panelFigura.setBorder(BorderFactory.createTitledBorder(""));
         add(panelFigura);
 
         btnReiniciar = new JButton("Reiniciar Intento");
