@@ -18,7 +18,14 @@ public class AdminPalabrasSecretas {
     
     ArrayList<String> palabrasSecretas;
     
-    
+    private AdminPalabrasSecretas(){
+      palabrasSecretas = new ArrayList<>(Arrays.asList(
+                "Leon", "Secreto",
+                "Mago", "Filtro",
+                "Proyecto", "Cable",
+                "Puntos", "Deidad",
+                "Artificial", "Loco"));
+    }
     
     public static AdminPalabrasSecretas getInstance(){
         if(instance == null){
