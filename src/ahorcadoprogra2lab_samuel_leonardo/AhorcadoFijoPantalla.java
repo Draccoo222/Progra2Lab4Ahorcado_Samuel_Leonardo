@@ -1,175 +1,277 @@
 package ahorcadoprogra2lab_samuel_leonardo;
-import ahorcadoprogra2lab_samuel_leonardo.JuegoAhorcadoFijo;
-import ahorcadoprogra2lab_samuel_leonardo.MenuPrincipal;
-import ahorcadoprogra2lab_samuel_leonardo.PantallaMenu;
+
 import javax.swing.*;
 import java.awt.*;
 
 /**
- *
+ * 
+ * 
  * @author hnleo
  */
-
 public class AhorcadoFijoPantalla extends JFrame {
 
-    private JComboBox<String> comboPalabras;
-    private JLabel lblPalabraActual, lblLetrasUsadas, lblIntentos, lblMensaje;
+    private JLabel lblPalabraActual, lblLetrasUsadas, lblIntentos, lblMensaje, lblPalabraFija;
     private JTextField txtLetra;
-    private JButton btnProbar, btnReiniciar, btnSalir, btnSeleccionar;
+    private JButton btnProbar, btnReiniciar, btnSalir;
     private JPanel panelFigura;
 
     private JuegoAhorcadoFijo juegoFijo;
+    private AdminPalabrasSecretas adminPalabras;
 
     public AhorcadoFijoPantalla() {
-        setTitle("AHORCADO FIJO");
-        setSize(600, 600);
-        setLayout(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        juegoFijo = new JuegoAhorcadoFijo();
-
-        comboPalabras = new JComboBox<>();
-        for (String palabra : juegoFijo.getPalabrasSecretas()) {
-            comboPalabras.addItem(palabra);
+        adminPalabras = AdminPalabrasSecretas.getInstance();
+        
+        if (!adminPalabras.isPalabraFijaYaElegida()) {
+            boolean palabraSeleccionada = adminPalabras.seleccionarPalabraFija();
+            if (!palabraSeleccionada) {
+                this.dispose();
+                JOptionPane.showMessageDialog(null, 
+                    "Debes seleccionar una palabra para jugar en modo fijo.", 
+                    "Palabra Requerida", JOptionPane.WARNING_MESSAGE);
+                new PantallaMenu().setVisible(true);
+                return;
+            }
         }
-        comboPalabras.setBounds(50, 20, 200, 25);
-        add(comboPalabras);
+        
+        setTitle("AHORCADO FIJO - Palabra: " + adminPalabras.getPalabraFija().toUpperCase());
+        setSize(600, 650);
+        setLayout(null);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); 
+        setLocationRelativeTo(null);
 
-        btnSeleccionar = new JButton("Seleccionar Palabra");
-        btnSeleccionar.setBounds(270, 20, 160, 25);
-        add(btnSeleccionar);
-
-        btnSeleccionar.addActionListener(e -> {
-            String seleccion = (String) comboPalabras.getSelectedItem();
-            if (seleccion != null) {
-                juegoFijo.selecPalabra(seleccion);
-                lblPalabraActual.setText(formatearPalabra(juegoFijo.getPalabraActual()));
-                lblLetrasUsadas.setText("Letras usadas: ");
-                lblIntentos.setText("Intentos restantes: 6");
-                lblMensaje.setText("¡Comienza el juego!");
-                panelFigura.repaint();
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                volverAlMenu();
             }
         });
 
-        // Label palabra actual
+        juegoFijo = new JuegoAhorcadoFijo();
+        juegoFijo.seleccionarPalabra(adminPalabras.getPalabraFija());
+
+        inicializarComponentes();
+        actualizarInterfaz();
+        
+        setVisible(true);
+    }
+    
+    private void inicializarComponentes() {
+        
+        lblPalabraFija = new JLabel("Palabra fija seleccionada: " + adminPalabras.getPalabraFija().toUpperCase());
+        lblPalabraFija.setFont(new Font("Arial", Font.BOLD, 14));
+        lblPalabraFija.setForeground(new Color(0, 100, 0)); 
+        lblPalabraFija.setBounds(50, 20, 400, 20);
+        add(lblPalabraFija);
+        JLabel lblInfo = new JLabel("Esta palabra no se puede cambiar en esta sesión");
+        lblInfo.setFont(new Font("Arial", Font.ITALIC, 12));
+        lblInfo.setForeground(Color.GRAY);
+        lblInfo.setBounds(50, 40, 400, 15);
+        add(lblInfo);
+
         lblPalabraActual = new JLabel("_ _ _ _ _");
         lblPalabraActual.setFont(new Font("Arial", Font.BOLD, 24));
-        lblPalabraActual.setBounds(50, 60, 500, 30);
+        lblPalabraActual.setBounds(50, 70, 500, 30);
         add(lblPalabraActual);
 
-        // Label letras usadas
         lblLetrasUsadas = new JLabel("Letras usadas: ");
-        lblLetrasUsadas.setBounds(50, 100, 500, 20);
+        lblLetrasUsadas.setBounds(50, 110, 500, 20);
         add(lblLetrasUsadas);
 
-        // Label intentos restantes
+        
         lblIntentos = new JLabel("Intentos restantes: 6");
-        lblIntentos.setBounds(50, 130, 200, 20);
+        lblIntentos.setBounds(50, 140, 200, 20);
         add(lblIntentos);
 
-        // Label mensaje
-        lblMensaje = new JLabel("Selecciona una palabra para comenzar.");
-        lblMensaje.setBounds(50, 160, 400, 20);
+        lblMensaje = new JLabel("¡Adivina la palabra secreta!");
+        lblMensaje.setBounds(50, 170, 400, 20);
         add(lblMensaje);
 
-        // Campo para ingresar letra
         txtLetra = new JTextField();
-        txtLetra.setBounds(50, 190, 50, 25);
+        txtLetra.setBounds(50, 200, 50, 25);
+        txtLetra.setFont(new Font("Arial", Font.BOLD, 16));
         add(txtLetra);
 
-        // Botón probar letra
         btnProbar = new JButton("Probar");
-        btnProbar.setBounds(120, 190, 100, 25);
+        btnProbar.setBounds(120, 200, 100, 25);
         add(btnProbar);
 
-        // Panel para la figura del ahorcado
         panelFigura = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                
-                g.drawLine(50, 200, 150, 200); // suelo
-                g.drawLine(100, 200, 100, 50); // poste vertical
-                g.drawLine(100, 50, 200, 50);  // barra superior
-                g.drawLine(200, 50, 200, 80);  // cuerda
-
-                int errores = juegoFijo.getIntentos();
-                switch (errores) {
-                    case 6: g.drawLine(200, 180, 220, 210); // pierna derecha
-                    case 5: g.drawLine(200, 180, 180, 210); // pierna izquierda
-                    case 4: g.drawLine(200, 120, 220, 160); // brazo derecho
-                    case 3: g.drawLine(200, 120, 180, 160); // brazo izquierdo
-                    case 2: g.drawLine(200, 80, 200, 180);   // cuerpo
-                    case 1: g.drawOval(180, 50, 40, 40);     // cabeza
-                        break;
-                    default:
-                        break;
-                }
+                dibujarAhorcado(g);
             }
         };
-        panelFigura.setBounds(300, 200, 250, 250);
+        panelFigura.setBounds(300, 250, 250, 250);
         panelFigura.setBackground(Color.WHITE);
+        panelFigura.setBorder(BorderFactory.createTitledBorder("El Ahorcado"));
         add(panelFigura);
 
-        
-        btnReiniciar = new JButton("Reiniciar");
-        btnReiniciar.setBounds(50, 500, 100, 30);
+        btnReiniciar = new JButton("Reiniciar Intento");
+        btnReiniciar.setBounds(50, 550, 140, 30);
         add(btnReiniciar);
 
-        btnSalir = new JButton("Salir");
-        btnSalir.setBounds(200, 500, 100, 30);
+        btnSalir = new JButton("Menú Principal");
+        btnSalir.setBounds(220, 550, 130, 30);
         add(btnSalir);
-
-        btnSalir.addActionListener(e -> {
-            new PantallaMenu().setVisible(true);
-        });
+        btnSalir.addActionListener(e -> volverAlMenu());
 
         btnReiniciar.addActionListener(e -> {
-            juegoFijo = new JuegoAhorcadoFijo();
-            comboPalabras.removeAllItems();
-            for (String palabra : juegoFijo.getPalabrasSecretas()) {
-                comboPalabras.addItem(palabra);
+            int confirmacion = JOptionPane.showConfirmDialog(this, 
+                "¿Estás seguro de que quieres reiniciar el intento?\n", "Confirmar Reinicio", 
+                JOptionPane.YES_NO_OPTION);
+            
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                juegoFijo.reiniciarJuego();
+                actualizarInterfaz();
+                lblMensaje.setText("Intento reiniciado.");
+                txtLetra.requestFocus();
             }
-            lblPalabraActual.setText("_ _ _ _ _");
-            lblLetrasUsadas.setText("Letras usadas: ");
-            lblIntentos.setText("Intentos restantes: 6");
-            lblMensaje.setText("Selecciona una palabra para comenzar.");
-            panelFigura.repaint();
         });
 
-        btnProbar.addActionListener(e -> {
-            String letraTexto = txtLetra.getText();
-            if (letraTexto.length() != 1) {
-                lblMensaje.setText("Ingresa solo una letra.");
-                return;
-            }
-            char letra = letraTexto.charAt(0);
-            boolean acierto = juegoFijo.verificarLetra(letra);
-            lblPalabraActual.setText(formatearPalabra(juegoFijo.getPalabraActual()));
-            lblLetrasUsadas.setText("Letras usadas: " + juegoFijo.getLetrasUsadas());
-            lblIntentos.setText("Intentos restantes: " + (6 - juegoFijo.getIntentos()));
+        btnProbar.addActionListener(e -> probarLetra());
+        txtLetra.addActionListener(e -> probarLetra());
+        txtLetra.requestFocus();
+    }
 
-            if (juegoFijo.hasGanado()) {
-                lblMensaje.setText("¡Ganaste!");
-            } else if (juegoFijo.getIntentos() >= 6) {
-                lblMensaje.setText("¡Perdiste! La palabra era: " + juegoFijo.getPalabraSecreta());
-            } else {
-                lblMensaje.setText(acierto ? "¡Bien!" : "Letra incorrecta.");
-            }
-
-            panelFigura.repaint();
+    private void probarLetra() {
+        String letraTexto = txtLetra.getText().trim();
+        
+        if (letraTexto.isEmpty()) {
+            lblMensaje.setText("Ingresa una letra.");
+            return;
+        }
+        
+        if (letraTexto.length() != 1) {
+            lblMensaje.setText("Ingresa solo una letra.");
             txtLetra.setText("");
-        });
+            return;
+        }
+        
+        char letra = letraTexto.toLowerCase().charAt(0);
+        
+        if (!Character.isLetter(letra)) {
+            lblMensaje.setText("Solo se permiten letras.");
+            txtLetra.setText("");
+            return;
+        }
+        
+        if (juegoFijo.juegoTerminado()) {
+            lblMensaje.setText("El juego acabó. Reinicia para jugar de nuevo.");
+            txtLetra.setText("");
+            return;
+        }
+        
+        boolean acierto = juegoFijo.verificarLetra(letra);
+        actualizarInterfaz();
+        
+        if (juegoFijo.hasGanado()) {
+            lblMensaje.setText("ADIVINASTE LA PALABRA, FELICIDADES!!!");
+            mostrarMensajeVictoria();
+        } else if (juegoFijo.haPerdido()) {
+            lblMensaje.setText("Perdiste, La palabra era: " + juegoFijo.getPalabraSecreta().toUpperCase());
+            mostrarMensajeDerrota();
+        } else {
+            lblMensaje.setText(acierto ? "Letra correcta." : "Letra incorrecta.");
+        }
+        
+        txtLetra.setText("");
+        
+        if (!juegoFijo.juegoTerminado()) {
+            txtLetra.requestFocus();
+        }
+    }
+    
+    private void mostrarMensajeVictoria() {
+        JOptionPane.showMessageDialog(this, 
+            "¡FELICIDADES!\n\n" +
+            "¡Adivinaste la palabra: " + juegoFijo.getPalabraSecreta().toUpperCase() + "!\n" +
+            "Intentos utilizados: " + juegoFijo.getIntentos() + " de 6\n\n" +
+            "¿Quieres intentar de nuevo con la misma palabra?", 
+            "¡Victoria!", 
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void mostrarMensajeDerrota() {
+        JOptionPane.showMessageDialog(this, 
+            "¡Game Over!\n\n" +
+            "La palabra era: " + juegoFijo.getPalabraSecreta().toUpperCase() + "\n" +
+            "¡Mejor suerte la próxima vez!\n\n" +
+            "¿Quieres intentar de nuevo con la misma palabra?", 
+            "Juego Terminado", 
+            JOptionPane.INFORMATION_MESSAGE);
+    }
 
-        setVisible(true);
+    private void actualizarInterfaz() {
+        lblPalabraActual.setText(formatearPalabra(juegoFijo.getPalabraActual()));
+        
+        StringBuilder letrasUsadas = new StringBuilder("Letras usadas: ");
+        for (Character letra : juegoFijo.getLetrasUsadas()) {
+            letrasUsadas.append(letra.toString().toUpperCase()).append(" ");
+        }
+        lblLetrasUsadas.setText(letrasUsadas.toString());
+        
+        int intentosRestantes = Math.max(0, 6 - juegoFijo.getIntentos());
+        lblIntentos.setText("Intentos restantes: " + intentosRestantes);
+        
+        panelFigura.repaint();
+    }
+
+    private void dibujarAhorcado(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setStroke(new BasicStroke(3));
+        g2d.setColor(Color.BLACK);
+        
+        g2d.drawLine(50, 200, 150, 200); 
+        g2d.drawLine(100, 200, 100, 50); 
+        g2d.drawLine(100, 50, 180, 50);  
+        g2d.drawLine(180, 50, 180, 80); 
+
+        
+        int errores = juegoFijo.getIntentos();
+        g2d.setColor(Color.RED);
+        g2d.setStroke(new BasicStroke(2));
+        
+        if (errores >= 1) { 
+            g2d.drawOval(165, 80, 30, 30);
+        }
+        if (errores >= 2) { 
+            g2d.drawLine(180, 110, 180, 160);
+        }
+        if (errores >= 3) { 
+            g2d.drawLine(180, 130, 160, 150);
+        }
+        if (errores >= 4) { 
+            g2d.drawLine(180, 130, 200, 150);
+        }
+        if (errores >= 5) { 
+            g2d.drawLine(180, 160, 160, 190);
+        }
+        if (errores >= 6) { 
+            g2d.drawLine(180, 160, 200, 190);
+           
+            g2d.setColor(Color.BLACK);
+            g2d.drawLine(172, 88, 178, 94); 
+            g2d.drawLine(178, 88, 172, 94);
+            g2d.drawLine(182, 88, 188, 94); 
+            g2d.drawLine(188, 88, 182, 94);
+        }
     }
 
     private String formatearPalabra(String palabra) {
+        if (palabra == null || palabra.isEmpty()) {
+            return "";
+        }
+        
         StringBuilder sb = new StringBuilder();
         for (char c : palabra.toCharArray()) {
-            sb.append(c).append(" ");
+            sb.append(Character.toUpperCase(c)).append(" ");
         }
-        return sb.toString();
+        return sb.toString().trim();
     }
-
+    
+    private void volverAlMenu() {
+        this.dispose();
+        new PantallaMenu().setVisible(true);
+    }
 }
