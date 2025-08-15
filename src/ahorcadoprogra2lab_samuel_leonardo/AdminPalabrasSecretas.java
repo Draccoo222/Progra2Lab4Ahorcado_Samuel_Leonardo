@@ -14,14 +14,9 @@ import javax.swing.JOptionPane;
  */
 public class AdminPalabrasSecretas {
     private static AdminPalabrasSecretas instance;
-    private ArrayList<String> palabrasSecretas = new ArrayList<>(Arrays.asList(
-            "Leon", "Secreto", 
-            "Mago", "Filtro", 
-            "Proyecto", "Cable", 
-            "Puntos", "Deidad",  
-            "Artificial", "Loco"));
+   
     
-    ArrayList<String> palabrasUser;
+    ArrayList<String> palabrasSecretas;
     
     
     
@@ -57,12 +52,15 @@ public class AdminPalabrasSecretas {
         palabrasSecretas.clear();
         palabrasSecretas.addAll(palabras); 
     }
-    
+
     public ArrayList<String> getPalabrasSecretas(){
         return palabrasSecretas;
     }
    
-    
+    public ArrayList<String> getPalabrasUsuario(){
+        return palabrasSecretas;
+    }
+ 
     
     
     public String elegirPalabraRandom(ArrayList<String> pals){
