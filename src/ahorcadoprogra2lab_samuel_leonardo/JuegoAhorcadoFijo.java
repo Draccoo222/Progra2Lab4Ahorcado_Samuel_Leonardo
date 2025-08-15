@@ -4,35 +4,58 @@
  */
 package ahorcadoprogra2lab_samuel_leonardo;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  *
  * @author hnleo
  */
 public class JuegoAhorcadoFijo extends JuegoAhorcadoBase{
-
+    private AdminPalabrasSecretas adm = AdminPalabrasSecretas.getInstance();
+    char[] palabraActual;
+ 
+    
     @Override
     void actualizarPalabraActual(char letra) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        boolean acierto = false;
+        for (int i = 0; i < palabraSecreta.length(); i++) {
+            if(palabraSecreta.charAt(i) == letra && palabraActual[i] == '_'){}
+            
+        }
+        
+        
     }
+    
+    
 
     @Override
     void verificarLetra(char letra) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+      
     }
+    
+    
+    
 
     @Override
     boolean hasGanado() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       
     }
 
     @Override
     public void inicializarPalabrasSecretas() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ArrayList<String> palabras = adm.getPalabrasSecretas();
+         palabraSecreta = adm.elegirPalabraRandom(palabras);
+        char[] palabraActual = new char[palabraSecreta.length()];
+        
+        Arrays.fill(palabraActual, '_');
+        
+        
     }
 
     @Override
     public void jugar() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+ 
     }
     
 }

@@ -54,18 +54,14 @@ public class AdminPalabrasSecretas {
             } while (palabra.isEmpty());
             palabras.add(palabra);
         }
-        palabrasUser.clear();
-        palabrasUser.addAll(palabras); 
+        palabrasSecretas.clear();
+        palabrasSecretas.addAll(palabras); 
     }
     
     public ArrayList<String> getPalabrasSecretas(){
         return palabrasSecretas;
     }
-    
-    public ArrayList<String> getPalabrasUsuario(){
-        return palabrasUser;
-    }
-    
+   
     
     
     
