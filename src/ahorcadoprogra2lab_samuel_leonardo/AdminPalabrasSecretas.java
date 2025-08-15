@@ -6,14 +6,23 @@ package ahorcadoprogra2lab_samuel_leonardo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.Random;
+import javax.swing.JOptionPane;
 /**
  *
  * @author unwir
  */
 public class AdminPalabrasSecretas {
     private static AdminPalabrasSecretas instance;
-    private ArrayList<String> palabrasSecretas = new ArrayList<>();
+    private ArrayList<String> palabrasSecretas = new ArrayList<>(Arrays.asList(
+            "Leon", "Secreto", 
+            "Mago", "Filtro", 
+            "Proyecto", "Cable", 
+            "Puntos", "Deidad",  
+            "Artificial", "Loco"));
+    
+    ArrayList<String> palabrasUser;
+    
     
     
     public static AdminPalabrasSecretas getInstance(){
@@ -23,12 +32,49 @@ public class AdminPalabrasSecretas {
         return instance;
     }
     
-    
-    public void addPrimerasPalabras(){
-        String[] palbarras = {"Leon", "Secreto", "Mago", "Filtro", "Proyecto", 
-            "Cable", "Puntos", "Deidad",  "Artificial", "Loco"};
-        palabrasSecretas.addAll(Arrays.asList(palbarras));
+    public void crearPalabras() {
+        ArrayList<String> palabras = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            String palabra;
+            do {
+                palabra = JOptionPane.showInputDialog(
+                        null,
+                        "Ingrese la palabra " + i + " de 10: ",
+                        "Crear Lista de Palabras",
+                        JOptionPane.QUESTION_MESSAGE
+                );
+                if (palabra == null) {
+                    JOptionPane.showMessageDialog(null, "Operacion cancelada.");
+                    break;
+                }
+                palabra = palabra.trim().toLowerCase();
+                if (palabra.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No puedes dejar la palabra vacia.");
+                }
+            } while (palabra.isEmpty());
+            palabras.add(palabra);
+        }
+        palabrasUser.clear();
+        palabrasUser.addAll(palabras); 
     }
+    
+    public ArrayList<String> getPalabrasSecretas(){
+        return palabrasSecretas;
+    }
+    
+    public ArrayList<String> getPalabrasUsuario(){
+        return palabrasUser;
+    }
+    
+    
+    
+    
+    public String elegirPalabraRandom(ArrayList<String> pals){
+        Random rand = new Random();
+        return pals.get(rand.nextInt(pals.size()));
+    }
+    
+   
    
     
 }
