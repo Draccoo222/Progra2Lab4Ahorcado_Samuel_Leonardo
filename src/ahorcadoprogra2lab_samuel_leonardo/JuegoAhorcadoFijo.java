@@ -44,9 +44,8 @@ public class JuegoAhorcadoFijo extends JuegoAhorcadoBase {
 
     @Override
     public boolean verificarLetra(char letra) {
-        letra = Character.toLowerCase(letra); // CORRECCIÓN: Usar toLowerCase para consistencia
+        letra = Character.toLowerCase(letra); 
         
-        // Validar que sea una letra
         if (!Character.isLetter(letra)) {
             return false;
         }
@@ -56,7 +55,7 @@ public class JuegoAhorcadoFijo extends JuegoAhorcadoBase {
             return false;
         }
         
-        letrasUsadas.add(letra); // CORRECCIÓN: Agregar la letra a las usadas siempre
+        letrasUsadas.add(letra); 
         
         if (palabraSecreta.toLowerCase().contains(String.valueOf(letra))) {
             actualizarPalabraActual(Character.toLowerCase(letra));
@@ -70,7 +69,7 @@ public class JuegoAhorcadoFijo extends JuegoAhorcadoBase {
     }
     
     public ArrayList<Character> getLetrasUsadas() {
-        return new ArrayList<>(letrasUsadas); // Retorna copia
+        return new ArrayList<>(letrasUsadas); 
     }
      
     public String getPalabraSecreta() {
@@ -85,12 +84,6 @@ public class JuegoAhorcadoFijo extends JuegoAhorcadoBase {
 
     @Override
     public void inicializarPalabrasSecretas() {
-//        if (!gestion.hayPalabrasDisponibles()) {
-//            JOptionPane.showMessageDialog(null, 
-//                "No hay palabras disponibles. Se inicializarán palabras por defecto.", 
-//                "Advertencia", JOptionPane.WARNING_MESSAGE);
-//            return;
-//        }
         
         String[] palabrasArray = palabrasSecretas.toArray(new String[0]);
         String seleccionPalabra = (String) JOptionPane.showInputDialog(

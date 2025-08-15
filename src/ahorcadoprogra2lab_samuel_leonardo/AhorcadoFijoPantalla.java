@@ -33,7 +33,7 @@ public class AhorcadoFijoPantalla extends JFrame {
             }
         }
         
-        setTitle("AHORCADO FIJO - Palabra: " + adminPalabras.getPalabraFija().toUpperCase());
+        setTitle("AHORCADO FIJO");
         setSize(600, 650);
         setLayout(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); 
@@ -57,16 +57,7 @@ public class AhorcadoFijoPantalla extends JFrame {
     
     private void inicializarComponentes() {
         
-        lblPalabraFija = new JLabel("Palabra fija seleccionada: " + adminPalabras.getPalabraFija().toUpperCase());
-        lblPalabraFija.setFont(new Font("Arial", Font.BOLD, 14));
-        lblPalabraFija.setForeground(new Color(0, 100, 0)); 
-        lblPalabraFija.setBounds(50, 20, 400, 20);
-        add(lblPalabraFija);
-        JLabel lblInfo = new JLabel("Esta palabra no se puede cambiar en esta sesión");
-        lblInfo.setFont(new Font("Arial", Font.ITALIC, 12));
-        lblInfo.setForeground(Color.GRAY);
-        lblInfo.setBounds(50, 40, 400, 15);
-        add(lblInfo);
+        
 
         lblPalabraActual = new JLabel("_ _ _ _ _");
         lblPalabraActual.setFont(new Font("Arial", Font.BOLD, 24));
@@ -157,7 +148,7 @@ public class AhorcadoFijoPantalla extends JFrame {
         }
         
         if (juegoFijo.juegoTerminado()) {
-            lblMensaje.setText("El juego acabó. Reinicia para jugar de nuevo.");
+            lblMensaje.setText("El juego acabó.");
             txtLetra.setText("");
             return;
         }
@@ -184,20 +175,15 @@ public class AhorcadoFijoPantalla extends JFrame {
     
     private void mostrarMensajeVictoria() {
         JOptionPane.showMessageDialog(this, 
-            "¡FELICIDADES!\n\n" +
-            "¡Adivinaste la palabra: " + juegoFijo.getPalabraSecreta().toUpperCase() + "!\n" +
-            "Intentos utilizados: " + juegoFijo.getIntentos() + " de 6\n\n" +
-            "¿Quieres intentar de nuevo con la misma palabra?", 
-            "¡Victoria!", 
+            "Felicidades\n\n" +
+            "Adivinaste la palabra: " + juegoFijo.getPalabraSecreta().toUpperCase() + "\n" + "Intentos utilizados: " + juegoFijo.getIntentos() + " de 6\n", "Victoria", 
             JOptionPane.INFORMATION_MESSAGE);
     }
     
     private void mostrarMensajeDerrota() {
         JOptionPane.showMessageDialog(this, 
-            "¡Game Over!\n\n" +
-            "La palabra era: " + juegoFijo.getPalabraSecreta().toUpperCase() + "\n" +
-            "¡Mejor suerte la próxima vez!\n\n" +
-            "¿Quieres intentar de nuevo con la misma palabra?", 
+            "Perdiste\n\n" +
+            "La palabra era: " + juegoFijo.getPalabraSecreta().toUpperCase() + "\n",
             "Juego Terminado", 
             JOptionPane.INFORMATION_MESSAGE);
     }
@@ -229,7 +215,7 @@ public class AhorcadoFijoPantalla extends JFrame {
 
         
         int errores = juegoFijo.getIntentos();
-        g2d.setColor(Color.RED);
+        g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(2));
         
         if (errores >= 1) { 
@@ -250,11 +236,6 @@ public class AhorcadoFijoPantalla extends JFrame {
         if (errores >= 6) { 
             g2d.drawLine(180, 160, 200, 190);
            
-            g2d.setColor(Color.BLACK);
-            g2d.drawLine(172, 88, 178, 94); 
-            g2d.drawLine(178, 88, 172, 94);
-            g2d.drawLine(182, 88, 188, 94); 
-            g2d.drawLine(188, 88, 182, 94);
         }
     }
 
