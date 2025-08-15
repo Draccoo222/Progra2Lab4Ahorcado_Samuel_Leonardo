@@ -11,10 +11,12 @@ import java.awt.event.ActionListener;
  */
 
 public class PantallaMenu extends JFrame {
+    
+    AdminPalabrasSecretas adm = AdminPalabrasSecretas.getInstance();
 
     public PantallaMenu() {
         setTitle("AHORCADO GAME");
-        setSize(600, 600);
+        setSize(750, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); 
         setLayout(new BorderLayout());
@@ -32,6 +34,7 @@ public class PantallaMenu extends JFrame {
         panelBotones.add(btnFijo);
         
         btnFijo.addActionListener(e->{
+            this.dispose();
              new AhorcadoFijoPantalla().setVisible(true);
         });
 
@@ -39,6 +42,7 @@ public class PantallaMenu extends JFrame {
         btnAzar.setFont(new Font("Arial", Font.PLAIN, 20));
         panelBotones.add(btnAzar);
         btnAzar.addActionListener(e->{
+            this.dispose();
             new AhorcadoAzarPantalla().setVisible(true);
         });
 
@@ -46,7 +50,16 @@ public class PantallaMenu extends JFrame {
         btnSalir.setFont(new Font("Arial", Font.PLAIN, 20));
         panelBotones.add(btnSalir);
 
+        JButton btnpal = new JButton("Cambiar Palabras");
+        btnpal.setFont(new Font("Arial", Font.PLAIN, 20));
+        panelBotones.add(btnpal);
+
         add(panelBotones, BorderLayout.CENTER);
+        
+        btnpal.addActionListener(e ->{
+            adm.crearPalabras();
+        });
+        
 
         btnSalir.addActionListener(new ActionListener() {
             @Override
